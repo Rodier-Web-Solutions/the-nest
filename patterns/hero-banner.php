@@ -8,8 +8,8 @@
  * Description: Full-width hero with heading, description, and primary + secondary CTAs. Swap the cover background for an image or color in the editor.
  */
 ?>
-<!-- wp:cover {"overlayColor":"neutral-dark","isUserOverlayColor":true,"minHeight":600,"minHeightUnit":"px","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|4xl","bottom":"var:preset|spacing|4xl","left":"var:preset|spacing|xl","right":"var:preset|spacing|xl"}}}} -->
-<div class="wp-block-cover alignfull" style="padding-top:var(--wp--preset--spacing--4xl);padding-bottom:var(--wp--preset--spacing--4xl);padding-left:var(--wp--preset--spacing--xl);padding-right:var(--wp--preset--spacing--xl);min-height:600px"><span aria-hidden="true" class="wp-block-cover__background has-neutral-dark-background-color has-background-dim-100 has-background-dim"></span>
+<!-- wp:cover {"overlayColor":"neutral-dark","isUserOverlayColor":true,"minHeight":600,"minHeightUnit":"px","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|xl-4","bottom":"var:preset|spacing|xl-4","left":"var:preset|spacing|xl","right":"var:preset|spacing|xl"}}}} -->
+<div class="wp-block-cover alignfull" style="padding-top:var(--wp--preset--spacing--xl-4);padding-bottom:var(--wp--preset--spacing--xl-4);padding-left:var(--wp--preset--spacing--xl);padding-right:var(--wp--preset--spacing--xl);min-height:600px"><span aria-hidden="true" class="wp-block-cover__background has-neutral-dark-background-color has-background-dim-100 has-background-dim"></span>
 <div class="wp-block-cover__inner-container">
 
 <!-- wp:group {"layout":{"type":"constrained"},"style":{"spacing":{"blockGap":"var:preset|spacing|lg"}}} -->

@@ -72,9 +72,20 @@ add_action( 'wp_enqueue_scripts', 'nest_enqueue_assets' );
 // Block Patterns
 // -------------------------------------------------------------------------
 
-function nest_register_pattern_categories(): void {
+function nest_register_patterns(): void {
 	register_block_pattern_category( 'nest', [
 		'label' => __( 'The Nest', 'nest' ),
 	] );
+
+	ob_start();
+	include get_template_directory() . '/patterns/hero-banner.php';
+	$hero_banner = ob_get_clean();
+
+	register_block_pattern( 'nest/hero-banner', [
+		'title'       => __( 'Hero Banner', 'nest' ),
+		'categories'  => [ 'nest' ],
+		'description' => __( 'Full-width hero with heading, description, and primary + secondary CTAs.', 'nest' ),
+		'content'     => $hero_banner,
+	] );
 }
-add_action( 'init', 'nest_register_pattern_categories' );
+add_action( 'init', 'nest_register_patterns', 1 );
