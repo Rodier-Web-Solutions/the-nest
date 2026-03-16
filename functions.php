@@ -87,5 +87,16 @@ function nest_register_patterns(): void {
 		'description' => __( 'Full-width hero with heading, description, and primary + secondary CTAs.', 'nest' ),
 		'content'     => $hero_banner,
 	] );
+
+	ob_start();
+	include get_template_directory() . '/patterns/services-section.php';
+	$services_section = ob_get_clean();
+
+	register_block_pattern( 'nest/services-section', [
+		'title'       => __( 'Services Section', 'nest' ),
+		'categories'  => [ 'nest' ],
+		'description' => __( '3-column feature card grid with eyebrow label, heading, and 6 cards. Add more cards to the grid as needed.', 'nest' ),
+		'content'     => $services_section,
+	] );
 }
 add_action( 'init', 'nest_register_patterns', 1 );

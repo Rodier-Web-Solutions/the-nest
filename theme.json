@@ -99,7 +99,7 @@
 			"lineHeight": "1.7"
 		},
 		"spacing": {
-			"blockGap": "var(--wp--preset--spacing--lg)",
+			"blockGap": "0",
 			"padding": {
 				"left": "var(--wp--preset--spacing--xl)",
 				"right": "var(--wp--preset--spacing--xl)"
