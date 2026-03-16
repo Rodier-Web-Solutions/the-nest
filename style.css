@@ -21,7 +21,7 @@ Tags:              full-site-editing, custom-colors, custom-logo, wide-blocks, b
   box-sizing: border-box;
 }
 
-:where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, figure, blockquote, pre, hr) {
+:where(h1, h2, h3, h4, h5, h6, p, dl, dd, figure, blockquote, pre, hr) {
   margin: 0;
   padding: 0;
 }
