@@ -39,6 +39,8 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Push content below the fixed header. JS writes --nest-header-height. */
+  padding-top: var(--nest-header-height, 0);
 }
 
 /* -----------------------------------------------------------------------
@@ -78,16 +80,135 @@ video {
    Layout: Site Header
 ------------------------------------------------------------------------ */
 
-/* Full-width background, content capped at 1600px, min 10px breathing room */
-.site-header,
+.site-header__topbar,
+.site-header__main,
 .site-footer-bar {
-  padding-left: max(10px, calc((100% - 1600px) / 2 + 10px));
-  padding-right: max(10px, calc((100% - 1600px) / 2 + 10px));
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
-.site-header {
-  padding-top: 10px;
-  padding-bottom: 10px;
+@media (max-width: 960px) {
+  .site-header__topbar,
+  .site-header__main,
+  .site-footer-bar {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Top utility bar */
+.site-header__topbar {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  gap: 1.5rem;
+}
+
+.site-header__topbar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.15s ease;
+}
+
+.site-header__topbar-link:hover {
+  color: #ffffff;
+}
+
+.site-header__topbar-link svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+/* Main header bar — handles the scroll shrink animation */
+.site-header__main {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  transition: padding 0.4s ease;
+}
+
+/* -----------------------------------------------------------------------
+   Utility: Section horizontal padding (responsive)
+------------------------------------------------------------------------ */
+
+.nest-section {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (max-width: 960px) {
+  .nest-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* CTA banner: force top/bottom padding to match services section (xl-3 = 4rem).
+   Overrides any stale inline value from the already-inserted page block. */
+.nest-section.has-primary-background-color {
+  padding-top: var(--wp--preset--spacing--xl-3) !important;
+  padding-bottom: var(--wp--preset--spacing--xl-3) !important;
+}
+
+/* -----------------------------------------------------------------------
+   Patterns: Pricing Table
+------------------------------------------------------------------------ */
+
+/* Card: flex column so the CTA button always pins to the bottom */
+.nest-pricing-card {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.nest-pricing-card .wp-block-buttons {
+  margin-top: auto;
+  width: 100%;
+}
+
+.nest-pricing-card .wp-block-button,
+.nest-pricing-card .wp-block-button__link {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Feature list — checkmark bullets */
+ul.nest-pricing-features {
+  list-style: none !important;
+  padding-left: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+ul.nest-pricing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+ul.nest-pricing-features li::before {
+  content: "✓";
+  font-weight: 700;
+  color: var(--wp--preset--color--accent);
+  flex-shrink: 0;
+  line-height: 1.6;
+}
+
+/* Checkmarks and text stay readable on the primary highlighted card */
+.has-primary-background-color ul.nest-pricing-features li {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.has-primary-background-color ul.nest-pricing-features li::before {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* -----------------------------------------------------------------------
@@ -122,6 +243,11 @@ video {
   background-color: #f3f4f6;
 }
 
+.services-grid.is-layout-grid {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 @media (max-width: 599px) {
   .services-grid.is-layout-grid {
     grid-template-columns: 1fr !important;
@@ -134,12 +260,326 @@ video {
   }
 }
 
+/* Pricing cards: no 2-column intermediate — all three stack together at once.
+   :has() targets the existing grid even before nest-pricing-grid class is present. */
+@media (max-width: 899px) {
+  .nest-pricing-grid.is-layout-grid,
+  .services-grid.is-layout-grid:has(.nest-pricing-card) {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Layout: Fixed Header
+------------------------------------------------------------------------ */
+
+/* -----------------------------------------------------------------------
+   Component: Site Alerts (fixed banner above header)
+------------------------------------------------------------------------ */
+
+.nest-alerts-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000; /* above the header */
+}
+
+.nest-alert {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.625rem 3rem 0.625rem 1.5rem; /* right padding gives space for dismiss btn */
+  background-color: #fef3c7;
+  border-bottom: 1px solid #f0a500;
+  color: #78350f;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  position: relative;
+}
+
+.nest-alert__content {
+  text-align: left;
+  max-width: 900px;
+}
+
+.nest-alert__content p {
+  margin: 0;
+  padding: 0;
+}
+
+.nest-alert__content a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.nest-alert__content a:hover {
+  color: #451a03;
+}
+
+.nest-alert__dismiss {
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.55;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.nest-alert__dismiss:hover,
+.nest-alert__dismiss:focus-visible {
+  opacity: 1;
+  background: rgba(120, 53, 15, 0.1);
+  outline: none;
+}
+
+/* -----------------------------------------------------------------------
+   Layout: Fixed Header
+------------------------------------------------------------------------ */
+
+.site-header {
+  position: fixed;
+  /* Pushed down by any active alerts; JS writes --nest-alerts-height */
+  top: var(--nest-alerts-height, 0px);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  width: 100%;
+}
+
+/* Compact state: shrink the main bar padding once the user scrolls */
+.site-header.is-scrolled .site-header__main {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Header CTA button */
+.nest-header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  background-color: var(--wp--preset--color--primary);
+  color: #ffffff !important;
+  text-decoration: none !important;
+  padding: 0.5rem 1.125rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.nest-header-cta:hover {
+  background-color: #1d4ed8;
+  text-decoration: none !important;
+}
+
+.nest-header-cta [data-lucide] {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
 /* -----------------------------------------------------------------------
    Blocks: Navigation
 ------------------------------------------------------------------------ */
 
 .wp-block-navigation a {
   text-decoration: none;
+}
+
+/* Space out top-level nav items in the header */
+.site-header .wp-block-navigation > ul,
+.site-header .wp-block-navigation .wp-block-navigation__container {
+  gap: 0.25rem;
+}
+
+.site-header .wp-block-navigation .wp-block-navigation-item__content {
+  padding: 0.4rem 0.75rem !important;
+}
+
+/* Logo: starts 1.5× larger on page load, shrinks smoothly once the user scrolls */
+.site-header .wp-block-site-logo {
+  transition: transform 0.4s ease;
+  transform-origin: left center;
+  transform: scale(1.5);
+}
+
+.site-header.is-scrolled .wp-block-site-logo {
+  transform: scale(1);
+}
+
+/* Reset logo to normal size when the mobile menu is open */
+.site-header:has(.wp-block-navigation__responsive-container.is-menu-open) .wp-block-site-logo {
+  transform: scale(1);
+}
+
+/* White nav links inside the dark fixed header */
+.site-header .wp-block-navigation a,
+.site-header .wp-block-navigation .wp-block-navigation-item__content {
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.15s ease;
+}
+
+.site-header .wp-block-navigation a:hover {
+  color: #ffffff;
+}
+
+/* Dropdown submenus — dark background to match the header */
+.site-header .wp-block-navigation__submenu-container {
+  background-color: #1a2232 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  min-width: 180px;
+  padding: 0.35rem 0;
+}
+
+/* Force text color on every element inside the submenu */
+.site-header .wp-block-navigation__submenu-container,
+.site-header .wp-block-navigation__submenu-container a,
+.site-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.site-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+  padding: 0.5rem 1.125rem !important;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.site-header .wp-block-navigation__submenu-container .wp-block-navigation-item:hover > a,
+.site-header .wp-block-navigation__submenu-container .wp-block-navigation-item:hover .wp-block-navigation-item__content {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Mobile menu toggle button — make it white */
+.site-header .wp-block-navigation__responsive-container-open,
+.site-header .wp-block-navigation__responsive-container-close {
+  color: #ffffff;
+}
+
+
+/* -----------------------------------------------------------------------
+   Mobile: Navigation breakpoint override
+   WordPress defaults to ~600px; we push this to 768px so the hamburger
+   only appears at mobile, not mid-tablet where the desktop nav still fits.
+------------------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+  /* Show the hamburger button */
+  .site-header .wp-block-navigation__responsive-container-open {
+    display: flex !important;
+  }
+
+  /* Hide the desktop nav link container (WP renders it as a plain <ul>) */
+  .site-header .wp-block-navigation > ul,
+  .site-header .wp-block-navigation > .wp-block-navigation__container {
+    display: none !important;
+  }
+
+  /* Hide the header CTA — no room at this width */
+  .nest-header-cta {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  /* Keep hamburger off on tablet and wider */
+  .site-header .wp-block-navigation__responsive-container-open {
+    display: none !important;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Mobile: Navigation overlay
+------------------------------------------------------------------------ */
+
+/* Dark overlay — matches the header instead of the default white */
+.site-header .wp-block-navigation__responsive-container.is-menu-open {
+  background-color: #111827 !important;
+}
+
+/* Close button */
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__responsive-container-close {
+  color: #ffffff;
+}
+
+/* All top-level links */
+.site-header .wp-block-navigation__responsive-container.is-menu-open a,
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation-item__content {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 1.25rem !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  background: transparent !important;
+}
+
+.site-header .wp-block-navigation__responsive-container.is-menu-open a:hover,
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation-item__content:hover {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+/* Submenu chevron / toggle arrow */
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation-submenu__toggle {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Submenus: flow inline as an indented list, not as a floating popup */
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__submenu-container {
+  position: static !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0.25rem 0 0.25rem 1.25rem !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+
+/* Sub-items: slightly smaller and dimmer */
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__submenu-container
+  .wp-block-navigation-item__content {
+  font-size: 1.05rem !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+  white-space: normal !important;
+}
+
+.site-header .wp-block-navigation__responsive-container.is-menu-open
+  .wp-block-navigation__submenu-container
+  .wp-block-navigation-item__content:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* -----------------------------------------------------------------------
@@ -154,6 +594,332 @@ video {
 
 .wp-block-button__link:hover {
   transform: translateY(-1px);
+}
+
+/* -----------------------------------------------------------------------
+   Component: Reviews Carousel
+------------------------------------------------------------------------ */
+
+.nest-reviews {
+  position: relative;
+}
+
+/* Viewport clips the sliding track horizontally.
+   Vertical padding + negative margin lets card box-shadows breathe
+   at the top and bottom without shifting the surrounding layout. */
+.nest-reviews__viewport {
+  overflow: hidden;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+  container-type: inline-size; /* lets cards use 100cqi for width */
+}
+
+/* Sliding track — all cards (including clones) in one flex row */
+.nest-reviews__track {
+  display: flex;
+  gap: 1.5rem;
+  will-change: transform;
+}
+
+/* Card: width = (viewport − 2 gaps) ÷ 3 */
+.nest-reviews__card {
+  flex: 0 0 calc((100cqi - 3rem) / 3);
+  min-width: 0;
+  background: var(--wp--preset--color--surface);
+  border-radius: 1rem;
+  padding: 1.75rem;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Google badge — top-right corner of card */
+.nest-reviews__google-badge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Stars */
+.nest-reviews__stars {
+  display: flex;
+  gap: 0.15em;
+  font-size: 1.125rem;
+  color: #f59e0b;
+  line-height: 1;
+}
+
+.nest-reviews__stars span {
+  display: inline-block;
+}
+
+/* Review quote text */
+.nest-reviews__text {
+  font-size: 0.9375rem;
+  color: var(--wp--preset--color--neutral-medium);
+  line-height: 1.75;
+  font-style: italic;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.nest-reviews__text p {
+  max-width: none;
+  margin: 0;
+}
+
+/* Author row */
+.nest-reviews__author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Reviewer photo — circle */
+.nest-reviews__photo {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--wp--preset--color--accent);
+}
+
+/* Initials fallback */
+.nest-reviews__photo--initials {
+  background-color: var(--wp--preset--color--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+  font-family: var(--wp--preset--font-family--heading);
+}
+
+.nest-reviews__author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.nest-reviews__name {
+  font-weight: 600;
+  font-style: normal;
+  color: var(--wp--preset--color--neutral-dark);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nest-reviews__position {
+  font-size: 0.8125rem;
+  color: var(--wp--preset--color--neutral-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Controls row: prev · dots · next */
+.nest-reviews__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.nest-reviews__btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1.5px solid #e5e7eb;
+  background: var(--wp--preset--color--surface);
+  color: var(--wp--preset--color--neutral-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.nest-reviews__btn:hover,
+.nest-reviews__btn:focus-visible {
+  background: var(--wp--preset--color--primary);
+  border-color: var(--wp--preset--color--primary);
+  color: #fff;
+  outline: none;
+}
+
+/* Dot indicators */
+.nest-reviews__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nest-reviews__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, width 0.25s ease;
+}
+
+.nest-reviews__dot.is-active {
+  background: var(--wp--preset--color--primary);
+  width: 1.5rem;
+}
+
+/* Responsive */
+@container (max-width: 700px) {
+  .nest-reviews__card {
+    flex: 0 0 calc((100cqi - 1.5rem) / 2);
+  }
+}
+
+@container (max-width: 420px) {
+  .nest-reviews__card {
+    flex: 0 0 100cqi;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Component: Social Links (footer brand icons)
+------------------------------------------------------------------------ */
+
+.nest-social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.nest-social-links__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: #f3f4f6;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nest-social-links__item:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.nest-social-links__item svg {
+  display: block;
+}
+
+/* -----------------------------------------------------------------------
+   Layout: Footer
+------------------------------------------------------------------------ */
+
+/* Column headings in the main footer */
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns h4.wp-block-heading {
+  margin-bottom: 1rem;
+}
+
+/* Footer links: underlined by default, no underline on hover */
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns a {
+  text-decoration: underline;
+}
+
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns a:hover {
+  text-decoration: none;
+}
+
+/* Search bar in the footer */
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns .wp-block-search {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Match input and button border radius */
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns .wp-block-search__input {
+  border-radius: 0.5rem;
+}
+
+.wp-block-group.alignfull:not(.site-footer-bar) .wp-block-columns .wp-block-search .wp-block-button__link {
+  border-radius: 0.5rem;
+}
+
+/* Footer Quick Links nav: flat hierarchical list, no popup submenus */
+.footer-nav .wp-block-navigation__submenu-container {
+  /* Override every mechanism WP uses to hide submenus */
+  position: static !important;
+  display: flex !important;
+  flex-direction: column !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  /* Strip popup styling */
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  transform: none !important;
+  transition: none !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: auto !important;
+}
+
+/* Parent item: stack label above children, don't clip */
+.footer-nav .wp-block-navigation-item.has-child {
+  overflow: visible !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+}
+
+/* Indent and de-emphasise nested items */
+.footer-nav .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+  padding-left: 1rem !important;
+  font-size: 0.8125rem !important;
+  opacity: 0.8;
+}
+
+/* Hide the submenu toggle chevron — not needed in a flat list */
+.footer-nav .wp-block-navigation__submenu-icon {
+  display: none !important;
 }
 
 /* -----------------------------------------------------------------------

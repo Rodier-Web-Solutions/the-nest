@@ -1,9 +1,45 @@
-<!-- wp:group {"align":"full","className":"site-header","backgroundColor":"surface","style":{"border":{"bottom":{"color":"#e5e7eb","style":"solid","width":"1px"}},"spacing":{"padding":{"top":"10px","bottom":"10px"}}},"layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap","verticalAlignment":"center"}} -->
-<div class="wp-block-group alignfull has-surface-background-color has-background site-header">
+<!-- wp:group {"align":"full","className":"site-header","style":{"border":{"bottom":{"color":"rgba(255,255,255,0.08)","style":"solid","width":"1px"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull site-header">
 
-	<!-- wp:site-logo {"width":160} /-->
+	<!-- ── Top utility bar ────────────────────────────────────────── -->
+	<!-- wp:group {"className":"site-header__topbar","style":{"color":{"background":"#0d1520"}},"layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+	<div class="wp-block-group site-header__topbar has-background" style="background-color:#0d1520">
 
-	<!-- wp:navigation {"layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap"},"overlayMenu":"mobile","showSubmenuIcon":true,"openSubmenusOnClick":false} /-->
+		<!-- wp:html -->
+		<a href="#" class="site-header__topbar-link">
+			<i data-lucide="shopping-bag" aria-hidden="true"></i>
+			Online Store
+		</a>
+		<!-- /wp:html -->
+
+		<!-- wp:shortcode -->[nest_biz_header_phone]<!-- /wp:shortcode -->
+
+	</div>
+	<!-- /wp:group -->
+
+	<!-- ── Main header bar (logo + nav) ───────────────────────────── -->
+	<!-- wp:group {"className":"site-header__main","backgroundColor":"neutral-dark","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+	<div class="wp-block-group site-header__main has-neutral-dark-background-color has-background">
+
+		<!-- wp:site-logo {"width":160} /-->
+
+		<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"},"style":{"spacing":{"blockGap":"var:preset|spacing|md"}}} -->
+		<div class="wp-block-group">
+
+			<!-- wp:navigation {"textColor":"surface","layout":{"type":"flex","justifyContent":"right","flexWrap":"nowrap"},"overlayMenu":"mobile","showSubmenuIcon":true,"openSubmenusOnClick":false,"style":{"typography":{"fontWeight":"500"}}} /-->
+
+			<!-- wp:html -->
+			<a href="#" class="nest-header-cta">
+				Get Started
+				<i data-lucide="arrow-right" aria-hidden="true"></i>
+			</a>
+			<!-- /wp:html -->
+
+		</div>
+		<!-- /wp:group -->
+
+	</div>
+	<!-- /wp:group -->
 
 </div>
 <!-- /wp:group -->

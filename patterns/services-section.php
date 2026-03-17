@@ -7,8 +7,8 @@
  * Description: 3-column feature card grid with eyebrow label, heading, and 6 cards. Dark/highlighted/light card variants. Add more cards to the grid as needed.
  */
 ?>
-<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|xl-3","bottom":"var:preset|spacing|xl-3","right":"var:preset|spacing|xl","left":"var:preset|spacing|xl"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
-<div class="wp-block-group alignfull">
+<!-- wp:group {"align":"full","className":"nest-section","style":{"spacing":{"padding":{"top":"var:preset|spacing|xl-3","bottom":"var:preset|spacing|xl-3"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
+<div class="wp-block-group alignfull nest-section">
 
 <!-- Eyebrow + heading -->
 <!-- wp:group {"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|xl"}}},"layout":{"type":"constrained","contentSize":"700px"}} -->
